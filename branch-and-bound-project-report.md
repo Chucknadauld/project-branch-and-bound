@@ -4,7 +4,7 @@
 
 ### Design Experience
 
-I met with Isaac on November 15th to talk about the project. We went over how the reduced cost matrix works and why it gives us a lower bound. Isaac explained how you reduce rows first, then columns, and that helps prune the search tree early. We also talked about edge cases like when a row is all infinity except the diagonal. His approach was similar to mine but he cached the minimum values instead of recalculating them. I think my way is simpler but his might be faster for really big matrices.
+I met with Isaac to talk about the project. We went over how the reduced cost matrix works and why it gives us a lower bound. Isaac explained how you reduce rows first, then columns, and that helps prune the search tree early. We also talked about edge cases like when a row is all infinity except the diagonal. His approach was similar to mine but he cached the minimum values instead of recalculating them. I think my way is simpler but his might be faster for really big matrices.
 
 ### Theoretical Analysis - Reduced Cost Matrix
 
@@ -59,7 +59,7 @@ The overall space complexity is **O(n^2)** because we store a copy of the entire
 
 ### Design Experience
 
-I met with Isaac again on November 20th to discuss branch and bound. We talked about how to structure the priority queue and what information each state needs to store. Isaac used a class for his states but I just used tuples because it seemed simpler. We also discussed when to prune nodes. He was pruning more aggressively than me at first, which made his algorithm faster but sometimes missed the optimal solution. After talking through it, we both realized you have to be careful with the pruning condition. The big question we debated was whether to start from city 0 or try multiple starting cities. I went with just starting from city 0 to keep it simple.
+I met with Isaac again to discuss branch and bound. We talked about how to structure the priority queue and what information each state needs to store. Isaac used a class for his states but I just used tuples because it seemed simpler. We also discussed when to prune nodes. He was pruning more aggressively than me at first, which made his algorithm faster but sometimes missed the optimal solution. After talking through it, we both realized you have to be careful with the pruning condition. The big question we debated was whether to start from city 0 or try multiple starting cities. I went with just starting from city 0 to keep it simple.
 
 ### Theoretical Analysis - Branch and Bound TSP
 
@@ -170,6 +170,65 @@ The main space usage comes from:
 
 If we have at most Q states in the queue and each state is O(n^2), the overall space complexity is around **O(Q \* n^2)** where Q is the max queue size. With my queue trimming, Q is capped at 20000, so it's effectively **O(n^2)** for reasonable inputs.
 
+### Theoretical Analysis - Greedy Algorithm
+
+#### Time
+
+```py
+def greedy_tour(edges: list[list[float]], timer: Timer) -> list[SolutionStats]:
+    n = len(edges)
+    stats = []
+
+    for start in range(n):
+        if timer.time_out():
+            return stats if stats else [SolutionStats([], math.inf, timer.time(), 1, 0, 0, 0, 0.0)]
+
+        tour = [start]
+        visited = {start}
+        current = start
+        valid = True
+
+        while len(tour) < n:
+            if timer.time_out():
+                return stats if stats else [SolutionStats([], math.inf, timer.time(), 1, 0, 0, 0, 0.0)]
+
+            best_next = None
+            best_weight = math.inf
+            for city in range(n):
+                if city in visited:
+                    continue
+                w = edges[current][city]
+                if math.isinf(w):
+                    continue
+                if w < best_weight or (w == best_weight and city < (best_next if best_next is not None else n)):
+                    best_weight = w
+                    best_next = city
+
+            if best_next is None:
+                valid = False
+                break
+
+            tour.append(best_next)
+            visited.add(best_next)
+            current = best_next
+
+        if not valid:
+            continue
+
+        if math.isinf(edges[current][start]):
+            continue
+
+        cost = score_tour(tour, edges)
+        if not stats or cost < stats[-1].score:
+            stats.append(SolutionStats(...))
+
+    ...
+```
+
+The outer loop tries each of the n cities as a starting point, so that's n iterations. Inside each iteration, we build a tour by repeatedly finding the nearest unvisited city. Finding the nearest city means checking all n cities, which is O(n). We do this n times to build the complete tour, so building one tour is O(n^2).
+
+Since we try n starting points and each one takes O(n^2), the overall time complexity is **O(n^3)**.
+
 ### Empirical Data
 
 | N   | Seed | Solution | time (ms) |
@@ -198,7 +257,7 @@ The branching factor k depends heavily on the quality of the initial BSSF. When 
 
 ### Design Experience
 
-I met with Isaac one more time on November 22nd to talk about tracking search space coverage. We discussed how to calculate what fraction of the search space we've explored. Isaac was using a simple counter but I found the CutTree class that does it more accurately by tracking which branches have been cut. We also compared branch and bound to backtracking from the last project. Backtracking explores way more of the search space because it doesn't use bounds to prune. Branch and bound is way smarter about which paths to explore.
+I met with Isaac one more time to talk about tracking search space coverage. We discussed how to calculate what fraction of the search space we've explored. Isaac was using a simple counter but I found the CutTree class that does it more accurately by tracking which branches have been cut. We also compared branch and bound to backtracking from the last project. Backtracking explores way more of the search space because it doesn't use bounds to prune. Branch and bound is way smarter about which paths to explore.
 
 ### Search Space Over Time
 
@@ -212,7 +271,7 @@ The difference is pretty significant. Branch and bound might explore 5-10% of th
 
 ### Design Experience
 
-I met with Isaac on November 25th to discuss smart branch and bound strategies. We talked about different priority queue keys. Isaac tried using the lower bound divided by path length, which gave some improvement but not a lot. I tried a depth-first approach where we prioritize longer paths, which worked better. The idea is to find complete solutions faster by going deep first, which updates the BSSF quickly and helps prune more branches. We also discussed other heuristics like looking at edge weights or the number of available edges, but the depth-first approach seemed simplest and most effective.
+I met with Isaac to discuss smart branch and bound strategies. We talked about different priority queue keys. Isaac tried using the lower bound divided by path length, which gave some improvement but not a lot. I tried a depth-first approach where we prioritize longer paths, which worked better. The idea is to find complete solutions faster by going deep first, which updates the BSSF quickly and helps prune more branches. We also discussed other heuristics like looking at edge weights or the number of available edges, but the depth-first approach seemed simplest and most effective.
 
 ### Selected PQ Key
 
@@ -224,50 +283,28 @@ The regular branch and bound uses just `child_cost` as the key, which is more br
 
 ### Branch and Bound versus Smart Branch and Bound
 
-Seed 1: Regular=4.237, Smart=4.122, Improvement=2.7%
-Seed 2: Regular=3.855, Smart=3.769, Improvement=2.2%
-Seed 3: Regular=3.292, Smart=3.233, Improvement=1.8%
-Seed 4: Regular=4.021, Smart=3.973, Improvement=1.2%
-Seed 5: Regular=4.210, Smart=4.203, Improvement=0.2%
-Seed 6: Regular=3.082, Smart=3.018, Improvement=2.1%
-Seed 7: Regular=3.856, Smart=3.967, Improvement=-2.9%
-Seed 8: Regular=3.389, Smart=3.276, Improvement=3.3%
-Seed 9: Regular=4.092, Smart=4.092, Improvement=0.0%
-Seed 10: Regular=3.937, Smart=3.889, Improvement=1.2%
-Seed 11: Regular=4.208, Smart=4.115, Improvement=2.2%
-Seed 12: Regular=3.223, Smart=3.141, Improvement=2.5%
-Seed 13: Regular=3.892, Smart=4.291, Improvement=-10.3%
-Seed 14: Regular=3.562, Smart=3.271, Improvement=8.2%
-Seed 15: Regular=3.476, Smart=3.459, Improvement=0.5%
-Seed 16: Regular=3.539, Smart=3.539, Improvement=0.0%
-Seed 17: Regular=3.509, Smart=3.509, Improvement=0.0%
-Seed 18: Regular=3.367, Smart=3.430, Improvement=-1.9%
-Seed 19: Regular=3.570, Smart=3.380, Improvement=5.3%
-Seed 20: Regular=3.607, Smart=3.607, Improvement=0.0%
-
-Markdown Table:
 | Seed | Regular B&B | Smart B&B | Improvement |
-|------|-------------|-----------|-------------|
-| 1 | 4.237 | 4.122 | 2.7 % |
-| 2 | 3.855 | 3.769 | 2.2 % |
-| 3 | 3.292 | 3.233 | 1.8 % |
-| 4 | 4.021 | 3.973 | 1.2 % |
-| 5 | 4.210 | 4.203 | 0.2 % |
-| 6 | 3.082 | 3.018 | 2.1 % |
-| 7 | 3.856 | 3.967 | -2.9 % |
-| 8 | 3.389 | 3.276 | 3.3 % |
-| 9 | 4.092 | 4.092 | 0.0 % |
-| 10 | 3.937 | 3.889 | 1.2 % |
-| 11 | 4.208 | 4.115 | 2.2 % |
-| 12 | 3.223 | 3.141 | 2.5 % |
-| 13 | 3.892 | 4.291 | -10.3 % |
-| 14 | 3.562 | 3.271 | 8.2 % |
-| 15 | 3.476 | 3.459 | 0.5 % |
-| 16 | 3.539 | 3.539 | 0.0 % |
-| 17 | 3.509 | 3.509 | 0.0 % |
-| 18 | 3.367 | 3.430 | -1.9 % |
-| 19 | 3.570 | 3.380 | 5.3 % |
-| 20 | 3.607 | 3.607 | 0.0 % |
+| ---- | ----------- | --------- | ----------- |
+| 1    | 4.237       | 4.122     | 2.7 %       |
+| 2    | 3.855       | 3.769     | 2.2 %       |
+| 3    | 3.292       | 3.233     | 1.8 %       |
+| 4    | 4.021       | 3.973     | 1.2 %       |
+| 5    | 4.210       | 4.203     | 0.2 %       |
+| 6    | 3.082       | 3.018     | 2.1 %       |
+| 7    | 3.856       | 3.967     | -2.9 %      |
+| 8    | 3.389       | 3.276     | 3.3 %       |
+| 9    | 4.092       | 4.092     | 0.0 %       |
+| 10   | 3.937       | 3.889     | 1.2 %       |
+| 11   | 4.208       | 4.115     | 2.2 %       |
+| 12   | 3.223       | 3.141     | 2.5 %       |
+| 13   | 3.892       | 4.291     | -10.3 %     |
+| 14   | 3.562       | 3.271     | 8.2 %       |
+| 15   | 3.476       | 3.459     | 0.5 %       |
+| 16   | 3.539       | 3.539     | 0.0 %       |
+| 17   | 3.509       | 3.509     | 0.0 %       |
+| 18   | 3.367       | 3.430     | -1.9 %      |
+| 19   | 3.570       | 3.380     | 5.3 %       |
+| 20   | 3.607       | 3.607     | 0.0 %       |
 
 Average improvement: 0.9%
 
@@ -281,7 +318,7 @@ The improvement varies depending on the graph. For some graphs where both algori
 
 ## Project Review
 
-I met with Isaac for the project review on November 26th. We spent about 20 minutes comparing our implementations and results.
+I met with Isaac for the project review. We spent about 20 minutes comparing our implementations and results.
 
 For code, we both used similar approaches for the reduced cost matrix and branch and bound. Isaac stored his matrix as a numpy array while I used nested lists. His version was slightly faster but mine was simpler. We both used priority queues with heapq.
 

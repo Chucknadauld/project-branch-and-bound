@@ -4,81 +4,80 @@
 
 ### Design Experience
 
-*Fill me in*
+_Fill me in_
 
 ### Theoretical Analysis - Reduced Cost Matrix
 
-#### Time 
+#### Time
 
-*Fill me in*
+_Fill me in_
 
 #### Space
 
-*Fill me in*
+_Fill me in_
 
 ## Core
 
 ### Design Experience
 
-*Fill me in*
+_Fill me in_
 
 ### Theoretical Analysis - Branch and Bound TSP
 
-#### Time 
+#### Time
 
-*Fill me in*
+_Fill me in_
 
 #### Space
 
-*Fill me in*
+_Fill me in_
 
 ### Empirical Data
 
 | N   | Seed | Solution | time (ms) |
-|-----|------|----------|-----------|
-| 5   |      |          |           |
-| 10  |      |          |           |
-| 15  |      |          |           |
-| 20  |      |          |           |
-| 30  |      |          |           |
-| 50  |      |          |           |
+| --- | ---- | -------- | --------- |
+| 5   | 100  | 1.686    | 0.01      |
+| 10  | 200  | 3.529    | 69.18     |
+| 15  | 300  | 3.390    | 6188.22   |
+| 20  | 400  | 3.852    | 0.17      |
+| 30  | 500  | 5.337    | 0.13      |
+| 50  | 600  | 7.320    | 4.16      |
 
 ### Comparison of Theoretical and Empirical Results
 
-- Empirical order of growth: 
-- Measured constant of proportionality: 
+- Empirical order of growth:
+- Measured constant of proportionality:
 
 ![img](img.png)
 
-*Fill me in*
+_Fill me in_
 
-## Stretch 1 
+## Stretch 1
 
 ### Design Experience
 
-*Fill me in*
+_Fill me in_
 
 ### Search Space Over Time
 
 ![Plot demonstrating search space explored over time]()
 
-*Fill me in*
+_Fill me in_
 
 ## Stretch 2
 
 ### Design Experience
 
-*Fill me in*
+_Fill me in_
 
 ### Selected PQ Key
 
-*Fill me in*
+_Fill me in_
 
 ### Branch and Bound versus Smart Branch and Bound
 
-*Fill me in*
+_Fill me in_
 
-## Project Report 
+## Project Report
 
-*Fill me in*
-
+_Fill me in_

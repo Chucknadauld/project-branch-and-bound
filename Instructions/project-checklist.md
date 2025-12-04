@@ -1,0 +1,79 @@
+# Project Checklist
+
+## General Requirements
+
+- [ ] Completed a Project Review (.5 if missing)
+- [ ] Compare your code and results with a classmate
+- [ ] Good Code Presentation (.5 if missing)
+- [ ] Good variable/function names
+- [ ] Good whitespace
+- [ ] Consistent style etc.
+- [ ] Good Code Structure (.5 if missing)
+- [ ] No deep nesting
+- [ ] No excessively long functions
+- [ ] No inappropriately duplicated code, etc.
+- [ ] Good Report Presentation (.5 if missing)
+- [ ] No poor whitespace
+- [ ] Correct grammar
+- [ ] Correct spelling/typos
+- [ ] All plots/images labeled appropriately (titles, lblbl, etc.
+- [ ] Design experience
+- [ ] State your discussion partner
+- [ ] Provide a brief summary of your conversation
+- [ ] Implement the reduced cost matrix algorithm
+- [ ] Write at least two tests for your reduced cost matrix (ie. test_reduce_cost_matrix.py)
+- [ ] Each test should use different inputs, and each test should test the contents of the final residual matrix and the final residual cost
+- [ ] Pass all the tests you write
+- [ ] Include your test_reduce_cost_matrix.py to Gradescope
+- [ ] Complete a theoretical analysis of the Reduced Cost Matrix Algorithm
+- [ ] Theoretical time of Reduced Cost Matrix
+- [ ] Include annotated code in report
+- [ ] Annotate all non-trivial parts of your code
+- [ ] Provide explanation of time complexity
+- [ ] State all assumptions clearly
+- [ ] Bold final time complexity
+- [ ] Theoretical space of Reduced Cost Matrix
+- [ ] Include annotated code in report
+- [ ] Annotate all non-trivial parts of your code
+- [ ] Provide explanation of space complexity
+- [ ] State all assumptions clearly
+- [ ] Bold final space complexity
+- [ ] Design experience
+- [ ] State your discussion partner
+- [ ] Provide a brief summary of your conversation
+- [ ] Implement the Branch and Bound TSP algorithm
+- [ ] Pass all core tests
+- [ ] Complete an analysis of Branch and Bound TSP
+- [ ] Theoretical time of Branch and Bound TSP
+- [ ] Include annotated code in report
+- [ ] Annotate all non-trivial parts of your code
+- [ ] Provide explanation of time complexity
+- [ ] State all assumptions clearly
+- [ ] Bold final time complexity
+- [ ] Theoretical space of Branch and Bound TSP using the branching factor approach
+- [ ] Include annotated code in report
+- [ ] Annotate all non-trivial parts of your code
+- [ ] Provide explanation of space complexity
+- [ ] State all assumptions clearly
+- [ ] Bold final space complexity
+- [ ] Empirical data of Branch and Bound TSP
+- [ ] Fill in empirical runtimes table
+- [ ] Comparison of Theoretical and Empirical Results of Branch and Bound TSP
+- [ ] Provide plot comparing theoretical time complexity to observed runtimes
+- [ ] If theoretical and empirical results match
+  - [ ] Simply state this
+  - [ ] If they do not match
+- [ ] Provide a plot showing a theoretical time complexity that more closely follows the observed runtimes
+- [ ] Provide a brief discussion explaining what sections of your code might account for the difference.
+- [ ] Design experience
+- [ ] State your discussion partner
+- [ ] Provide a brief summary of your conversation
+- [ ] Include the reasoning. (ExTrans: details in your .txt/LaTeX/docs
+- [ ] Create a plot demonstrating the amount of search space explored over time
+- [ ] Include the statistics of one of your Backtracking Algorithms from Project Backtracking on your plot
+- [ ] Discuss the differences observed between the amount of search space explored between the backtracking algorithm versus Branch and Bound. In your opinion, does the B&B algorithm make a meaningful difference to the results?
+- [ ] Implement Smart Branch and Bound
+- [ ] Pass the Stretch 2 tests
+- [ ] You may modify the contents of 'FRAME_FOR_SMART_BRANCH_AND_BOUND_SMART_TEST' in tsp_solver.py to demonstrate how your smart branch and bound performs better than your regular branch and bound
+- [ ] Comment on what key you selected for your priority queue and why you selected it
+- [ ] Run your smart B&B algorithm and your regular B&B algorithm (core test) on 20 different random seeds and report on how much better the smart B&B algorithm performs. Include a table and a plot summarizing this data.

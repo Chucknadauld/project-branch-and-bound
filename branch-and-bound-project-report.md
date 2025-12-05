@@ -261,6 +261,8 @@ I met with Isaac one more time to talk about tracking search space coverage. We 
 
 ### Search Space Over Time
 
+![Search Space Coverage](search_space_coverage.png)
+
 Based on the data from running branch and bound, the algorithm quickly covers a small fraction of the search space and finds good solutions early. With a good BSSF from greedy, most branches get pruned right away.
 
 Comparing to backtracking from the last project, backtracking had to explore a much larger portion of the search space before finding optimal solutions. Branch and bound finds good solutions faster because it uses the lower bound to skip branches that can't possibly be better than the current best.
